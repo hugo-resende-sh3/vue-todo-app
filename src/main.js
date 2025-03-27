@@ -21,8 +21,9 @@ app.use(ToastService)
 app.use(ConfirmationService)
 
 
-app.mount('#app') // monta a aplicação na div com id="app"
 app.component('Dialog', Dialog)
 app.component('Card', Card)
 app.component('Toast', Toast)
 app.component('ConfirmDialog', ConfirmDialog)
+
+app.mount('#app') // monta a aplicação na div com id="app"

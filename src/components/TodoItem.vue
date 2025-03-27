@@ -64,27 +64,33 @@
       header="Editar Tarefa"
       :style="{ width: '400px' }"
     >
-      <div class="modal-body">
-        <label>
-          Título:
-          <InputText v-model="tituloEditado" class="w-full" />
-        </label>
+      <div class="edit-form">
+        <div class="form-group">
+          <label for="edit-titulo">Título:</label>
+          <InputText id="edit-titulo" v-model="tituloEditado" class="w-full" />
+        </div>
 
-        <label>
-          Descrição:
-          <InputText v-model="descricaoEditada" class="w-full" />
-        </label>
+        <div class="form-group">
+          <label for="edit-descricao">Descrição:</label>
+          <Textarea
+            id="edit-descricao"
+            v-model="descricaoEditada"
+            autoResize
+            rows="3"
+            class="w-full"
+          />
+        </div>
       </div>
 
-      <template #footer>
+      <div class="form-actions">
+        <Button label="Adicionar" icon="pi pi-plus" @click="salvarEdicao" />
         <Button
           label="Cancelar"
           icon="pi pi-times"
-          class="p-button-text"
+          text
           @click="cancelarEdicao"
         />
-        <Button label="Salvar" icon="pi pi-check" @click="salvarEdicao" />
-      </template>
+      </div>
     </Dialog>
   </div>
 </template>
@@ -98,6 +104,7 @@ import Card from "primevue/card";
 import { useToast } from "primevue/usetoast";
 import { useConfirm } from "primevue/useconfirm";
 import { nextTick } from "vue";
+import Textarea from "primevue/textarea";
 
 const toast = useToast();
 const confirm = useConfirm();
@@ -261,5 +268,29 @@ const emit = defineEmits(["marcar-concluida", "excluir", "editar", "voltar"]);
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  margin-bottom: 0.25rem;
+  font-weight: bold;
+  text-align: left;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
 }
 </style>
