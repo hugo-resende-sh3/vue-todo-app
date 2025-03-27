@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Tarefas Pendentes</h1>
+    <h1 class="page-title">Tarefas Pendentes</h1>
 
     <!-- Botão para abrir o modal -->
     <Button
@@ -21,6 +21,8 @@
       <TodoForm @add-todo="handleAdicionar" />
     </Dialog>
 
+    <div class="spacer"></div>
+
     <!-- Lista de tarefas -->
     <TodoList
       :todos="todos"
@@ -39,7 +41,7 @@ import TodoList from "../components/TodoList.vue";
 import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 
-import { nanoid } from 'nanoid'
+import { nanoid } from "nanoid";
 
 const todos = ref([]);
 const mostrarDialog = ref(false);
@@ -96,3 +98,17 @@ onMounted(() => {
   }
 });
 </script>
+
+<style scoped>
+.spacer {
+  margin-bottom: 1.5rem;
+}
+
+.page-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #2e7d32;
+  font-weight: bold;
+}
+</style>

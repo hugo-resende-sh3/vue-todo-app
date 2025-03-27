@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Tarefas Concluídas</h1>
+    <h1 class="page-title">Tarefas Concluidas</h1>
 
     <TodoList
       :todos="concluidas"
@@ -43,3 +43,13 @@ function voltarParaPendentes(index) {
   localStorage.setItem("concluidas", JSON.stringify(concluidas.value));
 }
 </script>
+
+<style scoped>
+.page-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #d32f2f;
+  font-weight: bold;
+}
+</style>
