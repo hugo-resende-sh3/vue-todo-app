@@ -16,7 +16,7 @@
       <Textarea
         id="descricao"
         v-model="description"
-        placeholder="Descrição"
+        placeholder="Descrição da tarefa (opcional)" 
         rows="3"
         autoResize
         class="w-full"
