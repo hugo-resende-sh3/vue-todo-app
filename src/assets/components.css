@@ -1,0 +1,6 @@
+.card-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 w-full;
+}
+
+
+/* TODO: CRIAR MAIS ESTILOS PARA NAO POLUIR OS COMPONENTES COM CSS */

@@ -3,7 +3,7 @@
     :list="todos"
     item-key="id"
     tag="div"
-    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 w-full"
+    class="card-grid"
     :animation="200"
     ghost-class="drag-ghost"
     chosen-class="drag-chosen"
