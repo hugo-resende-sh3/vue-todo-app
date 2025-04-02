@@ -2,15 +2,8 @@
   <div>
     <h1 class="page-title">Tarefas Pendentes</h1>
 
-    <!-- Botão para abrir o modal -->
-    <Button
-      label="Nova Tarefa"
-      icon="pi pi-plus"
-      @click="abrirDialog"
-      class="mb-3"
-    />
+    <Button label="Nova Tarefa" icon="pi pi-plus" @click="abrirDialog" class="mb-3" />
 
-    <!-- Dialog com formulário -->
     <Dialog
       v-model:visible="mostrarDialog"
       modal
@@ -18,32 +11,23 @@
       :style="{ width: '400px' }"
       @hide="fecharDialog"
     >
-      <TodoForm @add-todo="handleAdicionar" />
+      <TodoForm :onCancel="fecharDialog" />
     </Dialog>
 
     <div class="spacer"></div>
 
-    <!-- Lista de tarefas -->
-    <TodoList
-      :todos="todos"
-      @marcar-concluida="concluirTarefa"
-      @excluir="excluirTarefa"
-      @editar="editarTarefa"
-    />
+    <TodoList :todos="todos" />
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
-import TodoForm from "../components/TodoForm.vue";
-import TodoList from "../components/TodoList.vue";
+import { ref } from 'vue';
+import { todos } from '../stores/tarefasStore'
+import TodoForm from '../components/TodoForm.vue';
+import TodoList from '../components/TodoList.vue';
+import Button from 'primevue/button';
+import Dialog from 'primevue/dialog';
 
-import Button from "primevue/button";
-import Dialog from "primevue/dialog";
-
-import { nanoid } from "nanoid";
-
-const todos = ref([]);
 const mostrarDialog = ref(false);
 
 function abrirDialog() {
@@ -54,61 +38,5 @@ function fecharDialog() {
   mostrarDialog.value = false;
 }
 
-function handleAdicionar(novaTarefa) {
-  novaTarefa.id = nanoid();
-  addTodo(novaTarefa);
-  fecharDialog();
-}
-
-function addTodo(novaTarefa) {
-  todos.value.push(novaTarefa);
-  salvarLocalStorage();
-}
-
-function editarTarefa(index, novosDados) {
-  todos.value[index].title = novosDados.title;
-  todos.value[index].description = novosDados.description;
-  salvarLocalStorage();
-}
-
-function concluirTarefa(index) {
-  const tarefa = todos.value.splice(index, 1)[0];
-  tarefa.done = true;
-
-  const concluídas = JSON.parse(localStorage.getItem("concluidas") || "[]");
-  concluídas.push(tarefa);
-  localStorage.setItem("concluidas", JSON.stringify(concluídas));
-
-  salvarLocalStorage();
-}
-
-function excluirTarefa(index) {
-  todos.value.splice(index, 1);
-  salvarLocalStorage();
-}
-
-function salvarLocalStorage() {
-  localStorage.setItem("todos", JSON.stringify(todos.value));
-}
-
-onMounted(() => {
-  const data = localStorage.getItem("todos");
-  if (data) {
-    todos.value = JSON.parse(data);
-  }
-});
 </script>
 
-<style scoped>
-.spacer {
-  margin-bottom: 1.5rem;
-}
-
-.page-title {
-  text-align: center;
-  font-size: 2rem;
-  margin-bottom: 1.5rem;
-  color: #2e7d32;
-  font-weight: bold;
-}
-</style>

@@ -24,40 +24,45 @@
     </div>
 
     <div class="form-actions">
-        <Button label="Adicionar" icon="pi pi-plus" type="submit" />
-        <Button label="Cancelar" icon="pi pi-times" text @click="cancelar" />
+      <Button label="Adicionar" icon="pi pi-plus" type="submit" />
+      <Button label="Cancelar" icon="pi pi-times" text @click="cancelar" />
     </div>
   </form>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref } from 'vue'
+import InputText from 'primevue/inputtext'
+import Button from 'primevue/button'
+import Textarea from 'primevue/textarea'
 
-// IMPORTS CORRETOS para PrimeVue 3.x
-import InputText from "primevue/inputtext";
-import Button from "primevue/button";
-import Textarea from "primevue/textarea";
+import { useTarefas } from '../components/composables/useTarefas'
 
-const title = ref("");
-const description = ref("");
+const props = defineProps({
+  onCancel: Function
+})
 
-const emit = defineEmits(["add-todo", "cancelar"]);
+const { adicionarNovaTarefa } = useTarefas()
+
+const title = ref('')
+const description = ref('')
 
 function handleSubmit() {
-  if (!title.value.trim()) return;
+  if (!title.value.trim()) return
 
-  emit("add-todo", {
+  adicionarNovaTarefa({
     title: title.value,
-    description: description.value,
-    done: false,
-  });
+    description: description.value
+  })
 
-  function cancelar() {
-    emit("cancelar");
-  }
+  title.value = ''
+  description.value = ''
 
-  title.value = "";
-  description.value = "";
+  if (props.onCancel) props.onCancel()
+}
+
+function cancelar() {
+  if (props.onCancel) props.onCancel()
 }
 </script>
 

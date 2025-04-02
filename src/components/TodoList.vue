@@ -1,22 +1,15 @@
 <template>
   <draggable
     :list="todos"
-    item-key="title"
+    item-key="id"
     tag="div"
     class="card-grid"
     :animation="200"
     ghost-class="drag-ghost"
     chosen-class="drag-chosen"
   >
-    <template #item="{ element, index }">
-      <TodoItem
-        :todo="element"
-        :readonly="readonly"
-        @marcar-concluida="marcarConcluida(index)"
-        @excluir="excluir(index)"
-        @editar="editar(index, $event)"
-        @voltar="voltar(index)"
-      />
+    <template #item="{ element }">
+      <TodoItem :todo="element" :readonly="readonly" />
     </template>
   </draggable>
 </template>
@@ -25,25 +18,11 @@
 import TodoItem from "./TodoItem.vue";
 import draggable from "vuedraggable";
 
-const props = defineProps({
+defineProps({
   todos: Array,
   readonly: Boolean,
 });
 
-const emit = defineEmits(["marcar-concluida", "excluir", "editar", "voltar"]);
-
-function marcarConcluida(index) {
-  emit("marcar-concluida", index);
-}
-function excluir(index) {
-  emit("excluir", index);
-}
-function editar(index, dados) {
-  emit("editar", index, dados);
-}
-function voltar(index) {
-  emit("voltar", index);
-}
 </script>
 
 <style scoped>

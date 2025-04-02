@@ -83,7 +83,7 @@
       </div>
 
       <div class="form-actions">
-        <Button label="Adicionar" icon="pi pi-plus" @click="salvarEdicao" />
+        <Button label="Salvar" icon="pi pi-check" @click="salvarEdicao" />
         <Button
           label="Cancelar"
           icon="pi pi-times"
@@ -101,13 +101,10 @@ import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 import Card from "primevue/card";
-import { useToast } from "primevue/usetoast";
-import { useConfirm } from "primevue/useconfirm";
-import { nextTick } from "vue";
 import Textarea from "primevue/textarea";
 
-const toast = useToast();
-const confirm = useConfirm();
+import { useTarefas } from "../components/composables/useTarefas";
+import { useConcluidas } from "../components/composables/useConcluidas";
 
 const props = defineProps({
   todo: Object,
@@ -119,65 +116,24 @@ const editando = ref(false);
 const tituloEditado = ref("");
 const descricaoEditada = ref("");
 
+const tarefas = props.readonly ? useConcluidas() : useTarefas();
+
 function toggleDetalhes() {
   mostrarDetalhes.value = !mostrarDetalhes.value;
 }
 
 function emitirConcluir() {
-  confirm.require({
-    message: "Deseja concluir esta tarefa?",
-    header: "Confirmação",
-    icon: "pi pi-check-circle",
-    acceptLabel: "Sim",
-    rejectLabel: "Cancelar",
-    accept: () => {
-      emit("marcar-concluida");
-      toast.add({
-        severity: "success",
-        summary: "Tarefa concluída",
-        life: 3000,
-      });
-    },
-  });
+  tarefas.confirmarConclusao?.(props.todo);
 }
 
 function confirmarExclusao() {
-  confirm.require({
-    message: "Tem certeza que deseja excluir?",
-    header: "Excluir Tarefa",
-    icon: "pi pi-exclamation-triangle",
-    acceptLabel: "Sim",
-    rejectLabel: "Cancelar",
-    accept: () => {
-      emit("excluir");
-      toast.add({
-        severity: "warn",
-        summary: "Tarefa excluída",
-        life: 3000,
-      });
-    },
-  });
+  tarefas.confirmarExclusao?.(props.todo);
 }
 
 function emitirVoltar() {
-  confirm.require({
-    message: "Deseja mover a tarefa para pendentes?",
-    header: "Confirmar Ação",
-    icon: "pi pi-question-circle",
-    acceptLabel: "Sim",
-    rejectLabel: "Cancelar",
-    accept: () => {
-      toast.add({
-        severity: "success",
-        summary: "Tarefa movida",
-        life: 3000,
-      });
-      nextTick(() => {
-        emit("voltar");
-      });
-    },
-  });
+  tarefas.confirmarVoltar?.(props.todo)
 }
+
 
 function abrirModalEdicao() {
   tituloEditado.value = props.todo.title || "";
@@ -190,16 +146,11 @@ function cancelarEdicao() {
 }
 
 function salvarEdicao() {
-  emit("editar", {
+  tarefas.confirmarEdicao?.(props.todo, {
     title: tituloEditado.value,
     description: descricaoEditada.value,
   });
   editando.value = false;
-  toast.add({
-    severity: "success",
-    summary: "Tarefa adicionada com sucesso",
-    life: 3000,
-  });
 }
 
 const cardStyle = computed(() =>
@@ -207,8 +158,6 @@ const cardStyle = computed(() =>
     ? { backgroundColor: "#fce8e6" }
     : { backgroundColor: "#e6f4ea" }
 );
-
-const emit = defineEmits(["marcar-concluida", "excluir", "editar", "voltar"]);
 </script>
 
 <style scoped>
@@ -223,7 +172,7 @@ const emit = defineEmits(["marcar-concluida", "excluir", "editar", "voltar"]);
   padding: 1rem;
   min-height: 140px;
   width: 100%;
-  max-width: 1000px; /* define limite de largura */
+  max-width: 1000px;
 }
 
 .task-header {
