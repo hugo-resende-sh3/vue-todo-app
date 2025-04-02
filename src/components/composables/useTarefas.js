@@ -69,7 +69,7 @@ export function useTarefas() {
     tarefa.done = true;
 
     concluidas.value.push(tarefa);
-    localStorage.setItem("concluidas", JSON.stringify(concluidas));
+    localStorage.setItem("concluidas", JSON.stringify(concluidas.value));
 
     salvar();
 
@@ -88,6 +88,8 @@ export function useTarefas() {
       icon: "pi pi-check-circle",
       acceptLabel: "Sim",
       rejectLabel: "Cancelar",
+      acceptClass: 'bg-emerald-500 text-white px-4 py-2 rounded hover:bg-emerald-600',
+      rejectClass: 'bg-gray-200 text-black px-4 py-2 rounded hover:bg-gray-300',
       accept: () => {
         const index = todos.value.findIndex((t) => t.id === tarefa.id);
         if (index !== -1) concluirTarefa(index);
@@ -115,6 +117,8 @@ export function useTarefas() {
       icon: "pi pi-exclamation-triangle",
       acceptLabel: "Sim",
       rejectLabel: "Cancelar",
+      acceptClass: "bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600",
+      rejectClass: "bg-gray-200 text-black px-4 py-2 rounded hover:bg-gray-300",
       accept: () => {
         const index = todos.value.findIndex((t) => t.id === tarefa.id);
         if (index !== -1) excluirTarefa(index);

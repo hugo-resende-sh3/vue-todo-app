@@ -3,7 +3,7 @@
     :list="todos"
     item-key="id"
     tag="div"
-    class="card-grid"
+    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 w-full"
     :animation="200"
     ghost-class="drag-ghost"
     chosen-class="drag-chosen"
@@ -22,20 +22,9 @@ defineProps({
   todos: Array,
   readonly: Boolean,
 });
-
 </script>
 
 <style scoped>
-.card-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.card-grid > * {
-  flex: 0 0 calc(33.33% - 1rem);
-}
-
 .drag-chosen {
   opacity: 0.8;
   transform: scale(1.02);

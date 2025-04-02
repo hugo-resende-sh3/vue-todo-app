@@ -1,23 +1,29 @@
 <template>
   <div>
-    <Card class="task-card" :style="cardStyle">
+    <Card
+      :style="cardStyle"
+      class="mb-4 shadow-md p-4 min-h-[140px] w-full max-w-[1000px]"
+    >
       <template #content>
-        <div class="task-header">
-          <div class="title-area">
+        <div class="flex justify-between items-start gap-4">
+          <div class="flex items-center gap-2 flex-1">
             <Button
               :icon="mostrarDetalhes ? 'pi pi-eye-slash' : 'pi pi-eye'"
-              class="toggle-btn"
               text
               rounded
+              class="text-xl mt-1"
               :style="{ color: readonly ? '#d32f2f' : '#388e3c' }"
               @click="toggleDetalhes"
             />
-            <span class="titulo" :class="{ riscado: readonly }">
+            <span
+              class="font-bold text-lg leading-tight break-words"
+              :class="{ 'line-through text-gray-500': readonly }"
+            >
               {{ todo.title }}
             </span>
           </div>
 
-          <div class="actions" @click.stop>
+          <div class="flex gap-2" @click.stop>
             <Button
               v-if="readonly"
               icon="pi pi-undo"
@@ -52,7 +58,10 @@
           </div>
         </div>
 
-        <p v-if="mostrarDetalhes && todo.description" class="task-description">
+        <p
+          v-if="mostrarDetalhes && todo.description"
+          class="mt-3 text-gray-600 whitespace-pre-wrap break-words"
+        >
           {{ todo.description }}
         </p>
       </template>
@@ -64,33 +73,50 @@
       header="Editar Tarefa"
       :style="{ width: '400px' }"
     >
-      <div class="edit-form">
-        <div class="form-group">
-          <label for="edit-titulo">Título:</label>
-          <InputText id="edit-titulo" v-model="tituloEditado" class="w-full" />
+      <form @submit.prevent="salvarEdicao" class="flex flex-col gap-4">
+        <div class="flex flex-col">
+          <label for="edit-titulo" class="font-bold mb-1 text-left"
+            >Título:</label
+          >
+          <InputText
+            id="edit-titulo"
+            v-model="tituloEditado"
+            placeholder="Título da tarefa"
+            class="w-full"
+            required
+          />
         </div>
 
-        <div class="form-group">
-          <label for="edit-descricao">Descrição:</label>
+        <div class="flex flex-col">
+          <label for="edit-descricao" class="font-bold mb-1 text-left"
+            >Descrição:</label
+          >
           <Textarea
             id="edit-descricao"
             v-model="descricaoEditada"
+            placeholder="Descrição (opcional)"
             autoResize
             rows="3"
             class="w-full"
           />
         </div>
-      </div>
 
-      <div class="form-actions">
-        <Button label="Salvar" icon="pi pi-check" @click="salvarEdicao" />
-        <Button
-          label="Cancelar"
-          icon="pi pi-times"
-          text
-          @click="cancelarEdicao"
-        />
-      </div>
+        <div class="flex justify-center gap-4 mt-6">
+          <Button
+            label="Salvar"
+            icon="pi pi-check"
+            type="submit"
+            class="bg-emerald-500 text-white px-4 py-2 rounded-md hover:bg-emerald-600"
+          />
+          <Button
+            label="Cancelar"
+            icon="pi pi-times"
+            text
+            @click="cancelarEdicao"
+            class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+          />
+        </div>
+      </form>
     </Dialog>
   </div>
 </template>
@@ -131,9 +157,8 @@ function confirmarExclusao() {
 }
 
 function emitirVoltar() {
-  tarefas.confirmarVoltar?.(props.todo)
+  tarefas.confirmarVoltar?.(props.todo);
 }
-
 
 function abrirModalEdicao() {
   tituloEditado.value = props.todo.title || "";
@@ -159,87 +184,3 @@ const cardStyle = computed(() =>
     : { backgroundColor: "#e6f4ea" }
 );
 </script>
-
-<style scoped>
-.riscado {
-  text-decoration: line-through;
-  color: #888;
-}
-
-.task-card {
-  margin-bottom: 1rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  padding: 1rem;
-  min-height: 140px;
-  width: 100%;
-  max-width: 1000px;
-}
-
-.task-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
-}
-
-.title-area {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  flex: 1;
-}
-
-.titulo {
-  font-weight: bold;
-  font-size: 1.1rem;
-  line-height: 1.4;
-  word-break: break-word;
-}
-
-.actions {
-  display: flex;
-  gap: 0.3rem;
-}
-
-.task-description {
-  margin-top: 0.75rem;
-  color: #555;
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-
-.toggle-btn {
-  font-size: 1.2rem;
-  margin-top: 0.1rem;
-}
-
-.modal-body {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.edit-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-}
-
-.label {
-  margin-bottom: 0.25rem;
-  font-weight: bold;
-  text-align: left;
-}
-
-.form-actions {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-</style>

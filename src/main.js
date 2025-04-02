@@ -11,7 +11,7 @@ import ConfirmDialog from 'primevue/confirmdialog'
 import 'primevue/resources/themes/aura-light-green/theme.css'
 import 'primevue/resources/primevue.min.css'
 import 'primeicons/primeicons.css'
-
+import './assets/main.css'
 
 const app = createApp(App)
 

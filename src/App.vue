@@ -1,19 +1,33 @@
 <template>
-  <div>
-    <nav :class="['main-nav', isCompletedPage ? 'completed' : 'pendentes']">
-      <RouterLink to="/todos" class="nav-link" exact-active-class="active-link">
+  <div :class="pageBackground">
+    <nav class="flex justify-center gap-8 p-4 border-b border-gray-300 shadow-sm">
+      <RouterLink
+        to="/todos"
+        class="font-semibold text-lg transition-colors duration-200"
+        :class="[
+          isCompletedPage ? 'text-gray-400' : 'text-emerald-600',
+          route.path === '/todos' && !isCompletedPage ? 'border-b-2 border-emerald-600 pb-1' : ''
+        ]"
+      >
         📝 Pendentes
       </RouterLink>
+
       <RouterLink
         to="/completed"
-        class="nav-link"
-        exact-active-class="active-link"
+        class="font-semibold text-lg transition-colors duration-200"
+        :class="[
+          isCompletedPage ? 'text-red-600' : 'text-gray-400',
+          route.path === '/completed' && isCompletedPage ? 'border-b-2 border-red-600 pb-1' : ''
+        ]"
       >
         ✅ Concluídas
       </RouterLink>
     </nav>
 
-    <RouterView />
+    <main class="w-full px-6 py-6">
+      <RouterView />
+    </main>
+
     <Toast />
     <ConfirmDialog />
   </div>
@@ -24,47 +38,9 @@ import { RouterLink, RouterView, useRoute } from "vue-router";
 import { computed } from "vue";
 
 const route = useRoute();
-
 const isCompletedPage = computed(() => route.path.includes("/completed"));
+
+const pageBackground = computed(() =>
+  isCompletedPage.value ? "bg-red-50 min-h-screen" : "bg-emerald-50 min-h-screen"
+);
 </script>
-
-<style>
-.main-nav {
-  padding: 1rem;
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  border-bottom: 2px solid #ccc;
-  margin-bottom: 2rem;
-  transition: background-color 0.3s ease;
-}
-
-.main-nav.pendentes {
-  background-color: #e0f2f1; /* verdinho claro */
-}
-
-.main-nav.completed {
-  background-color: #fce8e6; /* vermelhinho claro */
-}
-
-.nav-link {
-  font-weight: bold;
-  text-decoration: none;
-  font-size: 1.1rem;
-  transition: color 0.2s;
-  color: #2e7d32;
-}
-
-.main-nav.completed .nav-link {
-  color: #c62828;
-}
-
-.nav-link:hover {
-  text-decoration: underline;
-}
-
-.active-link {
-  border-bottom: 2px solid currentColor;
-  padding-bottom: 0.2rem;
-}
-</style>
